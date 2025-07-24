@@ -1,0 +1,18 @@
+<h1>Recent Code Snippets</h1>
+
+{% if snippets %}
+  <ul>
+    {% for snippet in snippets %}
+      <li>
+        <a href="{% url 'codeshare:detail' snippet.pk %}">
+          {{ snippet.title|default:"(No Title)" }}
+        </a>
+        — <small>{{ snippet.created_at|date:"M d, Y H:i" }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No snippets shared yet from your network.</p>
+{% endif %}
+
+<a href="{% url 'codeshare:share' %}">➕ Share a New Snippet</a>

@@ -1,0 +1,12 @@
+<h1>Share a Code Snippet</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit">🚀 Share Snippet</button>
+</form>
+
+<p>
+  <a href="{% url 'codeshare:index' %}">⬅ Back to Home</a>
+</p>

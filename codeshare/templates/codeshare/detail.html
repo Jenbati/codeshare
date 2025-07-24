@@ -1,0 +1,12 @@
+<h1>{{ snippet.title|default:"Code Snippet" }}</h1>
+
+<p>
+  <strong>Language:</strong> {{ snippet.language }}<br>
+  <strong>Shared on:</strong> {{ snippet.created_at|date:"M d, Y H:i" }}
+</p>
+
+<pre style="background:#f4f4f4; padding: 10px; border: 1px solid #ccc;">
+{{ snippet.code }}
+</pre>
+
+<a href="{% url 'codeshare:index' %}">⬅ Back to Home</a>
