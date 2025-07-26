@@ -10,7 +10,7 @@ class CodeGroup(models.Model):
 class CodeSnippet(models.Model):
     group = models.ForeignKey(CodeGroup, on_delete=models.CASCADE, related_name='snippets')
     title = models.CharField(max_length=100, blank=True)
-    code = models.TextField()
+    code = models.TextField(blank=True)
     language = models.CharField(max_length=50, default='plaintext')
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,0 +1,37 @@
+<!-- templates/codeshare/all_in_one.html -->
+
+<h1>Code Share</h1>
+
+<!-- Share Form -->
+<h2>Share a Code Snippet</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Share</button>
+</form>
+
+<hr>
+
+<!-- Recent Snippets -->
+<h2>Your Recent Snippets</h2>
+<ul>
+    {% for snippet in snippets %}
+        <li>
+            <a href="?snippet_id={{ snippet.id }}">
+                {{ snippet.title|default:"Snippet " }} ({{ snippet.language }})
+            </a>
+        </li>
+    {% empty %}
+        <li>No snippets yet.</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<!-- Detail View -->
+{% if snippet_detail %}
+    <h2>Snippet Details</h2>
+    <p><strong>Title:</strong> {{ snippet_detail.title }}</p>
+    <p><strong>Language:</strong> {{ snippet_detail.language }}</p>
+    <pre>{{ snippet_detail.code }}</pre>
+{% endif %}

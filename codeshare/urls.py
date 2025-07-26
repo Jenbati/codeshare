@@ -5,6 +5,9 @@ app_name = 'codeshare'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('share/', views.share, name='share'),
-    path('snippet/<int:pk>/', views.detail, name='detail'),
+    path('create/', views.create, name='create'),
+    path('reset/<int:pk>/', views.reset, name='reset'),
+    path('update/<int:pk>/', views.update, name='update'),
+    path('delete/<int:pk>/', views.delete, name='delete'),
+
 ]

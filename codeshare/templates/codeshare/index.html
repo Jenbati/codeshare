@@ -1,18 +1,98 @@
-<h1>Recent Code Snippets</h1>
+{% load static %}
+<!-- Bootstrap 5 CDN -->
+<link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-{% if snippets %}
-  <ul>
-    {% for snippet in snippets %}
-      <li>
-        <a href="{% url 'codeshare:detail' snippet.pk %}">
-          {{ snippet.title|default:"(No Title)" }}
-        </a>
-        — <small>{{ snippet.created_at|date:"M d, Y H:i" }}</small>
-      </li>
+<style>
+  body {
+    background-color: #dcdbdb;
+    color: #ffffff;
+  }
+
+</style>
+
+<div class="container mt-4">
+
+  {% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     {% endfor %}
-  </ul>
-{% else %}
-  <p>No snippets shared yet from your network.</p>
-{% endif %}
+  {% endif %}
 
-<a href="{% url 'codeshare:share' %}">➕ Share a New Snippet</a>
+
+  <h1 class="mb-4 text-center text-dark">
+    <img src="{% static 'images/logo.png' %}" alt="logo" width="200px">
+  </h1>
+
+  {% if snippets %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for snippet in snippets %}
+        <div class="col">
+          <div class="card h-100 shadow-sm text-bg-light">
+            <div class="card-body">
+
+              <!-- Delete (X) Button -->
+               <div class="d-flex justify-content-between align-items-start mb-2">
+                  <form method="POST" action="{% url 'codeshare:update' snippet.id %}" class="w-75 me-2">
+                      {% csrf_token %}
+                      <input type="text" name="title"  class="form-control form-control-sm fw-bold"  value="{{ snippet.title }}" placeholder="Code {{forloop.counter}}">
+                  </form>
+
+                  <form action="{% url 'codeshare:delete' snippet.id %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-trash"></i></button>
+                  </form>
+               </div>
+          
+              <form method="POST" action="{% url 'codeshare:update' snippet.id %}">
+                  {% csrf_token %}
+                  <div class="mb-2">
+                    <textarea name="code" id="code-{{ snippet.id }}" class="form-control font-monospace" rows="8">{{snippet.code}}</textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-sm btn-light">Update</button>
+                  <a href="{% url 'codeshare:reset' snippet.id %}" class="btn btn-sm btn-light">Reset</a>
+                  <button class="btn btn-sm btn-outline-dark" onclick="copyToClipboard('code-{{ snippet.id }}')"> Copy </button>
+                   
+              </form>
+
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">No snippets shared yet from your network.</div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <form action="{% url 'codeshare:create' %}" method="post">
+      {% csrf_token %}
+      <button type="Submit" class="btn btn-light btn-lg">➕  Create a New Snippet</button>
+    </form>
+  </div>
+
+</div>
+
+<!-- ✅ Copy to Clipboard JS -->
+<script>
+  function copyToClipboard(elementId) {
+    const elementTextArea = document.getElementById(elementId);
+    navigator.clipboard.writeText(elementTextArea.value).then(() => {
+      // Highlight the textarea background temporarily
+      elementTextArea.style.backgroundColor = "#d4edda"; // light green
+
+      // Revert back after a second
+      setTimeout(() => {
+        elementTextArea.style.backgroundColor = "";
+      }, 1000);
+    }).catch((err) => {
+      console.error("Failed to copy:", err);
+    });
+  }
+</script>
+
+<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js'></script>
