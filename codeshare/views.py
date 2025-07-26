@@ -4,15 +4,6 @@ from .models import CodeSnippet, CodeGroup
 from .forms import CodeSnippetForm
 from django.http import HttpResponse
 
-def show_ip(request):
-    ip = request.META.get('HTTP_X_FORWARDED_FOR')
-    if ip:
-        ip = ip.split(',')[0]  # Get real IP if behind proxy
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return HttpResponse(f"Your IP is: {ip}")
-
-
 def get_client_ip(request):
     forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
     if forwarded:
@@ -23,13 +14,16 @@ def get_client_ip(request):
 
 def index(request):
     ip = get_client_ip(request)
-    group, _ = CodeGroup.objects.get_or_create(public_ip=ip)
-    snippets = CodeSnippet.objects.filter(group=group).order_by('-created_at')[:10]
+    try:
+        group = CodeGroup.objects.get(public_ip=ip)
+        snippets = CodeSnippet.objects.filter(group=group).order_by('-created_at')[:10]
+    except CodeGroup.DoesNotExist:
+        snippets = []  # No group yet, show empty list
     return render(request, 'codeshare/index.html', {'snippets': snippets})
 
 def share(request):
     ip = get_client_ip(request)
-    group, _ = CodeGroup.objects.get_or_create(public_ip=ip)
+    group, _ = CodeGroup.objects.get_or_create(public_ip=ip) # group is created only here
     if request.method == 'POST':
         form = CodeSnippetForm(request.POST)
         if form.is_valid():
