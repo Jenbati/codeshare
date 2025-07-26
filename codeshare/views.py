@@ -23,10 +23,11 @@ def index(request):
 
 def share(request):
     ip = get_client_ip(request)
-    group, _ = CodeGroup.objects.get_or_create(public_ip=ip) # group is created only here
+    
     if request.method == 'POST':
         form = CodeSnippetForm(request.POST)
         if form.is_valid():
+            group, _ = CodeGroup.objects.get_or_create(public_ip=ip) # group is created only here
             snippet = form.save(commit=False)
             snippet.group = group
             snippet.save()
