@@ -1,25 +1,37 @@
 # Python
 __pycache__/
 *.py[cod]
-*.sqlite3
+*.so
 
-# Virtual Environment
-venv/
+# Environment
+.env
+*.env
 
 # Django
-*.log
-*.pot
-*.pyc
-*.pyo
-*.db
 db.sqlite3
-
-# Environment Variables
-.env
-
-# Static and media files
-staticfiles/
 media/
+staticfiles/
 
-# VSCode
+# Virtualenv
+venv/
+ENV/
+env/
+
+# VSCode/IDE files
 .vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Gunicorn socket (if used)
+gunicorn.sock
+
+# Certbot & SSL (if copied)
+etc/letsencrypt/
+
+# Nginx config (optional, if stored)
+*.conf
