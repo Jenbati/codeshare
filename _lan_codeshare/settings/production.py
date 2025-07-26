@@ -1,6 +1,10 @@
 from .base import *
 from decouple import config
 
+DEBUG = config("DEBUG", default=False, cast=bool)
+SECRET_KEY = config('SECRET_KEY')
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", "").split(",")
+
 SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
